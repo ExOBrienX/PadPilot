@@ -26,13 +26,13 @@ butler push publish/PadPilot-1.0.1-win-x64.zip exobrienx/padpilot:windows --user
 
 Set up your **DualSense, DualSense Edge, DualShock 4** or **generic controller** via USB or Bluetooth.
 
-- 💡 **Light bar** — colors per player or per controller, brightness, low-battery and charging indicators that override games
-- 🎯 **Adaptive triggers** — pistol, shotgun, machine gun, assault rifle, bow and car presets, plus fine tuning
-- ⌨️ **Remapping & macros** — Xbox buttons, keys, Windows shortcuts or macro sequences on any button
-- 🧭 **Live tester** — sticks, triggers, buttons, touchpad; stick calibration and dead zones against drift
-- 🎧 **Mic & headphones (USB)** — mic level, Mute button with LED, self-monitoring and headphone test
-- 🕹️ **Xbox 360 emulation** — for games that only accept Xbox controllers (needs the free ViGEmBus driver)
-- 🌗 Light/dark theme · English/Spanish · lives in the system tray
+- **Light bar** — colors per player or per controller, brightness, low-battery and charging indicators that override games
+- **Adaptive triggers** — pistol, shotgun, machine gun, assault rifle, bow and car presets, plus fine tuning
+- **Remapping & macros** — Xbox buttons, keys, Windows shortcuts or macro sequences on any button
+- **Live tester** — sticks, triggers, buttons, touchpad; stick calibration and dead zones against drift
+- **Mic & headphones (USB)** — mic level, Mute button with LED, self-monitoring and headphone test
+- **Xbox 360 emulation** — for games that only accept Xbox controllers (needs the free ViGEmBus driver)
+- Light/dark theme · English/Spanish · lives in the system tray
 
 **Free.** If it helps you, a small donation keeps it going — here or on [Ko-fi](https://ko-fi.com/exo_brienx). Source code: [GitHub](https://github.com/ExOBrienX/PadPilot) (GPL-3.0).
 

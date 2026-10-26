@@ -1,83 +1,106 @@
 # PadPilot
 
-Gestor de mandos para Windows: **DualSense**, **DualSense Edge**, **DualShock 4** y mandos **genéricos**,
-por USB o Bluetooth. Vive en la bandeja del sistema y cada mando recuerda su configuración.
+A controller manager for Windows. It works with the DualSense, DualSense Edge, DualShock 4 and most generic
+USB or Bluetooth gamepads. It sits in the system tray, and each controller remembers its own settings.
 
-Autor: **ExO** · Versión **1.0.1** · Español / English · [Web](https://exobrienx.github.io/PadPilot/) · [Descargas](https://github.com/ExOBrienX/PadPilot/releases/latest)
+[Website](https://exobrienx.github.io/PadPilot/) · [Download](https://github.com/ExOBrienX/PadPilot/releases/latest) · [Support on Ko-fi](https://ko-fi.com/exo_brienx)
 
 ![PadPilot](store/screenshots/en/01-light.png)
 
-## Funciones
+## What it does
 
-- **Mandos:** varios a la vez, con jugador 1-4. Los genéricos se configuran solos (descriptor HID) o con el asistente "uno por uno".
-- **Luz:** color por jugador o por mando, intensidad. Indicadores de batería baja y de carga con prioridad sobre los juegos.
-- **Gatillos adaptativos:** perfiles de un clic (pistola, escopeta, ametralladora, arco, coche) y ajuste fino.
-- **Botones:** remapeo a botones Xbox, teclas, atajos de Windows o macros.
-- **Macros:** secuencias de teclas y botones Xbox con tiempos; una vez o en repetición mientras se mantiene.
-- **Probar:** sticks, gatillos, botones y touchpad en vivo; calibración de centro y zona muerta contra el drift.
-- **Audio (USB):** micrófono con medidor, volumen y botón Mute con LED; escucharse y grabar; audífonos del mando.
-- **Emulación Xbox 360** (ViGEmBus) en el orden de los jugadores, con vibración.
-- **HidHide** (opcional): oculta los mandos originales a los juegos mientras se emula.
-- **Ajustes:** idioma, tema claro/oscuro, diseño vertical u horizontal, inicio con Windows.
+- **Light bar.** Pick a color per player or per controller and adjust the brightness. When the battery runs low the
+  light blinks red, and while charging it goes from green to blue. These indicators take priority, so a game can't
+  override them.
+- **Adaptive triggers.** Presets for the DualSense (pistol, shotgun, machine gun, assault rifle, bow, car), plus
+  manual tuning for each trigger.
+- **Button remapping.** Assign any button to an Xbox button, a keyboard key, a Windows shortcut or a macro.
+- **Macros.** Sequences of keys and Xbox buttons with your own timing. They can run once or repeat while you hold the button.
+- **Live tester.** Sticks, triggers, buttons and the touchpad in real time. It includes stick center calibration and
+  dead zones, which helps a lot with drift.
+- **Microphone and headphones.** Over USB you can check the mic level, use the Mute button (its LED follows the mic
+  state), listen to yourself and test the headphone jack.
+- **Xbox 360 emulation.** For games that only recognize Xbox controllers. Players keep their order and rumble is
+  passed back to the real controller.
+- **Generic controllers.** They're detected automatically. If a button ends up in the wrong place, there's a
+  step-by-step mapping wizard.
+- English and Spanish, light and dark theme, vertical or horizontal layout, and an option to start with Windows.
 
-## Requisitos
+## Requirements
 
-| Componente | Para qué |
-|---|---|
-| Windows 10/11 64 bits | — (.NET viene incluido en el .exe) |
-| [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases/latest) | Solo emulación Xbox 360 |
-| [HidHide](https://github.com/nefarius/HidHide/releases/latest) | Opcional: ocultar el mando original durante la emulación |
+- Windows 10 or 11, 64-bit. .NET is bundled, so there's nothing else to install.
+- [ViGEmBus](https://github.com/nefarius/ViGEmBus/releases/latest), only if you want Xbox 360 emulation.
+- [HidHide](https://github.com/nefarius/HidHide/releases/latest), optional. It hides the physical controller from
+  games while emulation is on, so they don't see two controllers.
 
-## Desarrollo
+## Installing
 
-Requiere el [.NET 10 SDK](https://dotnet.microsoft.com/download).
+Download the zip from [Releases](https://github.com/ExOBrienX/PadPilot/releases/latest), extract it anywhere and run
+`PadPilot\PadPilot.exe`.
+
+The app isn't digitally signed yet. Windows may show "Windows protected your PC"; click *More info* and then
+*Run anyway*. If Smart App Control is turned on, Windows may block it with no way to continue. A signed version
+is planned.
+
+## Building from source
+
+You need the [.NET 10 SDK](https://dotnet.microsoft.com/download).
 
 ```bash
-dotnet build                                   # compila todo
-dotnet run --project src/PadPilot.App          # la app
-dotnet run --project tools/PadPilot.Probe      # consola de diagnóstico del protocolo
+dotnet build
+dotnet run --project src/PadPilot.App
 ```
 
-### Publicar
+There's also a small console tool for testing the controller protocol without the UI:
+
+```bash
+dotnet run --project tools/PadPilot.Probe
+```
+
+To make a portable build:
 
 ```bash
 dotnet publish src/PadPilot.App -c Release -r win-x64 --self-contained -p:PublishReadyToRun=true -p:DebugType=none -o publish/folder
 ```
 
-Genera una carpeta portable con `PadPilot.exe` (incluye .NET). Se usa carpeta y no archivo único porque
-**Smart App Control** de Windows 11 bloquea los `.exe` grandes sin firmar; la carpeta pasa mejor mientras
-la app no esté firmada. Al subir una etiqueta `vX.Y.Z`, GitHub Actions compila y publica el release solo. Antes de publicar, completa los enlaces en
-`src/PadPilot.App/Services/AppInfo.cs` (Ko-fi, repositorio, web) y en `docs/index.html` (`CONFIG`).
+It's published as a folder rather than a single file on purpose: Smart App Control is much more likely to block a
+large unsigned single-file executable. Pushing a `vX.Y.Z` tag makes GitHub Actions build and publish the release.
 
-### Sitio web
-
-`docs/` es la página del proyecto para **GitHub Pages** (Settings → Pages → rama `main`, carpeta `/docs`).
-
-## Estructura
+### Project layout
 
 ```
-src/PadPilot.Core/     Núcleo sin interfaz: protocolo HID, mandos, perfiles, luces
-src/PadPilot.App/      Interfaz Avalonia, emulación (ViGEm), HidHide, audio, macros, textos ES/EN
-tools/PadPilot.Probe/  Consola de diagnóstico
-docs/                  Sitio web (GitHub Pages)
+src/PadPilot.Core/     Controller protocol, devices, profiles and lights (no UI)
+src/PadPilot.App/      Avalonia UI, Xbox emulation, HidHide, audio, macros, translations
+tools/PadPilot.Probe/  Console diagnostics
+docs/                  Website (GitHub Pages)
+store/                 Microsoft Store and itch.io assets and listings
+installer/             Inno Setup script
 ```
 
-## Notas técnicas
+### A few protocol notes
 
-- **Bluetooth:** DualSense y DS4 empiezan con un reporte reducido; leer el feature report 0x05 activa el completo.
-- **CRC32:** por Bluetooth cada reporte de salida termina en un CRC32 (semilla `0xA2`); si falla, el mando lo ignora.
-- **Batería:** se informa en pasos de 10 % (5, 15, 25…).
-- **Luces con prioridad:** se reenvían cada segundo solo las luces (sin tocar vibración ni gatillos).
-- **USB + Bluetooth a la vez:** se prefiere la conexión USB (tiene audio).
+- Over Bluetooth, the DualSense and DualShock 4 start with a reduced input report. Reading feature report `0x05`
+  switches them to the full one.
+- Bluetooth output reports end with a CRC32 seeded with `0xA2`. If it's wrong, the controller silently ignores the report.
+- Battery level is reported in 10% steps (5, 15, 25 and so on).
+- To keep the lights in place, PadPilot resends only the light state once per second, so it never touches a game's
+  rumble or trigger effects.
+- If the same controller is connected over USB and Bluetooth at the same time, USB is preferred because it has audio.
 
-## Licencia
+## Reporting problems
 
-PadPilot es software libre bajo la licencia **GPL-3.0** (ver `LICENSE`). Puedes usarlo, estudiarlo y modificarlo;
-si lo redistribuyes, debe ser con su código fuente y bajo la misma licencia.
+Open an [issue](https://github.com/ExOBrienX/PadPilot/issues). Mention your controller, whether it's connected over USB
+or Bluetooth, and your Windows version.
 
-Si te resulta útil, puedes apoyar su desarrollo en **[Ko-fi](https://ko-fi.com/exo_brienx)** ☕
+## Supporting the project
 
-## Marcas
+PadPilot is free and will stay free. If it's useful to you, you can buy me a coffee on
+[Ko-fi](https://ko-fi.com/exo_brienx). It helps cover things like the code signing certificate.
 
-PlayStation, DualSense y DualShock son marcas de Sony Interactive Entertainment. Xbox es una marca de Microsoft.
-PadPilot no está afiliado a ninguna de ellas. Componentes de terceros: ver `THIRD-PARTY-NOTICES.txt`.
+## License
+
+GPL-3.0. You're free to use, study and modify it. If you distribute it, it has to be with the source code and under
+the same license. Third-party components are listed in `THIRD-PARTY-NOTICES.txt`.
+
+PlayStation, DualSense and DualShock are trademarks of Sony Interactive Entertainment. Xbox is a trademark of
+Microsoft. PadPilot isn't affiliated with either of them.
