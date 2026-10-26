@@ -2,7 +2,7 @@
 ; Compilar:  iscc installer\PadPilot.iss   (después de "dotnet publish ... -o publish\folder", ver README)
 
 #define AppName "PadPilot"
-#define AppVersion "1.0.0"
+#define AppVersion "1.0.1"
 #define AppPublisher "ExO"
 #define AppExe "PadPilot.exe"
 

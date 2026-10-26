@@ -9,7 +9,7 @@
     <InvariantGlobalization>true</InvariantGlobalization>
 
     <!-- Datos del producto: aparecen en Propiedades → Detalles del .exe y en "Acerca de" -->
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Product>PadPilot</Product>
     <Authors>ExO</Authors>
     <Company>ExO</Company>

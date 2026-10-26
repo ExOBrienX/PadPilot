@@ -10,7 +10,7 @@ arte en `store/art/` y logos del paquete en `store/microsoft/Assets/`.
 3. En *Product management → Product identity* copia `Package/Identity/Name`, `Publisher` y `PublisherDisplayName`.
 4. Genera el paquete:
    ```powershell
-   .\store\microsoft\build-msix.ps1 -IdentityName "<Name>" -Publisher "<Publisher>" -PublisherDisplayName "<PublisherDisplayName>" -Version 1.0.0.0
+   .\store\microsoft\build-msix.ps1 -IdentityName "<Name>" -Publisher "<Publisher>" -PublisherDisplayName "<PublisherDisplayName>" -Version 1.0.1.0
    ```
 5. En la ficha (*Submission*): precio **Free**, categoría **Utilities & tools**, sube el `.msix` en *Packages*,
    rellena *Store listings* (inglés y español, abajo) y *Age ratings* (cuestionario: sin contenido sensible).
@@ -21,7 +21,7 @@ arte en `store/art/` y logos del paquete en `store/microsoft/Assets/`.
 | Campo | Valor |
 |---|---|
 | Categoría | Utilities & tools |
-| Precio | Free (donaciones desde la app) |
+| Precio | Free (donaciones en https://ko-fi.com/exo_brienx) |
 | Política de privacidad | https://exobrienx.github.io/PadPilot/privacy.html |
 | Sitio web | https://exobrienx.github.io/PadPilot/ |
 | Soporte | https://github.com/ExOBrienX/PadPilot/issues |

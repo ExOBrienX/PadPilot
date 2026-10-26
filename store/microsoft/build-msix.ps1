@@ -1,4 +1,4 @@
-<#
+﻿<#
   Crea PadPilot.msix para subirlo a la Microsoft Store (la Store lo firma; no hace falta certificado).
 
   Requisitos: .NET 10 SDK y Windows SDK (makeappx.exe y makepri.exe):
@@ -6,13 +6,13 @@
 
   Uso (los tres datos salen de Partner Center → tu app → Product management → Product identity):
     .\store\microsoft\build-msix.ps1 -IdentityName "12345ExO.PadPilot" `
-        -Publisher "CN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" -PublisherDisplayName "ExO" -Version 1.0.0.0
+        -Publisher "CN=XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" -PublisherDisplayName "ExO" -Version 1.0.1.0
 #>
 param(
     [Parameter(Mandatory)] [string] $IdentityName,
     [Parameter(Mandatory)] [string] $Publisher,
     [Parameter(Mandatory)] [string] $PublisherDisplayName,
-    [string] $Version = "1.0.0.0"
+    [string] $Version = "1.0.1.0"
 )
 $ErrorActionPreference = "Stop"
 

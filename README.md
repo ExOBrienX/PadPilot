@@ -3,7 +3,7 @@
 Gestor de mandos para Windows: **DualSense**, **DualSense Edge**, **DualShock 4** y mandos **genéricos**,
 por USB o Bluetooth. Vive en la bandeja del sistema y cada mando recuerda su configuración.
 
-Autor: **ExO** · Versión **1.0.0** · Español / English · [Web](https://exobrienx.github.io/PadPilot/) · [Descargas](https://github.com/ExOBrienX/PadPilot/releases/latest)
+Autor: **ExO** · Versión **1.0.1** · Español / English · [Web](https://exobrienx.github.io/PadPilot/) · [Descargas](https://github.com/ExOBrienX/PadPilot/releases/latest)
 
 ![PadPilot](store/screenshots/en/01-light.png)
 
@@ -75,7 +75,7 @@ docs/                  Sitio web (GitHub Pages)
 PadPilot es software libre bajo la licencia **GPL-3.0** (ver `LICENSE`). Puedes usarlo, estudiarlo y modificarlo;
 si lo redistribuyes, debe ser con su código fuente y bajo la misma licencia.
 
-Si te resulta útil, puedes apoyar su desarrollo con una donación (enlace en la app, en *Acerca de*).
+Si te resulta útil, puedes apoyar su desarrollo en **[Ko-fi](https://ko-fi.com/exo_brienx)** ☕
 
 ## Marcas
 

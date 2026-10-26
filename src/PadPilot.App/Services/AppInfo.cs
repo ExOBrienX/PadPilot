@@ -12,7 +12,7 @@ public static class AppInfo
 
     // ---- Completar al publicar ----
     /// <summary>Página de donaciones, p. ej. https://ko-fi.com/tu_usuario</summary>
-    public const string DonateUrl = "";
+    public const string DonateUrl = "https://ko-fi.com/exo_brienx";
 
     /// <summary>Repositorio de GitHub, p. ej. https://github.com/tu_usuario/PadPilot</summary>
     public const string RepositoryUrl = "https://github.com/ExOBrienX/PadPilot";
