@@ -3,7 +3,7 @@
 ## Crear la página
 
 1. <https://itch.io/game/new>
-2. **Title:** PadPilot · **Project URL:** `exobrienx.itch.io/padpilot`
+2. **Title:** PadPilot · **Project URL:** `exo-brienx.itch.io/padpilot` (publicada)
 3. **Short description:** Controller manager for DualSense, DualShock 4 and generic controllers
 4. **Classification:** Tools · **Kind of project:** Downloadable
 5. **Pricing:** *No payments* → mejor **"$0 or donate"** con donación sugerida **2 USD**
@@ -17,7 +17,7 @@
 
 ```bash
 butler login
-butler push publish/PadPilot-1.0.1-win-x64.zip exobrienx/padpilot:windows --userversion 1.0.1
+butler push publish/PadPilot-1.0.1-win-x64.zip exo-brienx/padpilot:windows --userversion 1.0.1
 ```
 
 ## Texto de la página (inglés + español)

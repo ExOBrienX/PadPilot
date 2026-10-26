@@ -3,7 +3,7 @@
 A controller manager for Windows. It works with the DualSense, DualSense Edge, DualShock 4 and most generic
 USB or Bluetooth gamepads. It sits in the system tray, and each controller remembers its own settings.
 
-[Website](https://exobrienx.github.io/PadPilot/) · [Download](https://github.com/ExOBrienX/PadPilot/releases/latest) · [Support on Ko-fi](https://ko-fi.com/exo_brienx)
+[Website](https://exobrienx.github.io/PadPilot/) · [Download](https://github.com/ExOBrienX/PadPilot/releases/latest) · [itch.io](https://exo-brienx.itch.io/padpilot) · [Support on Ko-fi](https://ko-fi.com/exo_brienx)
 
 ![PadPilot](store/screenshots/en/01-light.png)
 
@@ -35,7 +35,7 @@ USB or Bluetooth gamepads. It sits in the system tray, and each controller remem
 
 ## Installing
 
-Download the zip from [Releases](https://github.com/ExOBrienX/PadPilot/releases/latest), extract it anywhere and run
+Download the zip from [Releases](https://github.com/ExOBrienX/PadPilot/releases/latest) or [itch.io](https://exo-brienx.itch.io/padpilot), extract it anywhere and run
 `PadPilot\PadPilot.exe`.
 
 The app isn't digitally signed yet. Windows may show "Windows protected your PC"; click *More info* and then
