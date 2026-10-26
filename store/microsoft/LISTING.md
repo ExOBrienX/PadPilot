@@ -15,7 +15,7 @@ arte en `store/art/` y logos del paquete en `store/microsoft/Assets/`.
 Generar el paquete de una versión nueva (subir antes `<Version>` en `Directory.Build.props`):
 
 ```powershell
-.\store\microsoftuild-msix.ps1 -IdentityName "ExOBrienX.PadPilot" -Publisher "CN=8D1519FD-343A-4078-B795-91BE9465FFC1" -PublisherDisplayName "ExOBrienX" -Version 1.0.1.0
+.\store\microsoft\build-msix.ps1 -IdentityName "ExOBrienX.PadPilot" -Publisher "CN=8D1519FD-343A-4078-B795-91BE9465FFC1" -PublisherDisplayName "ExOBrienX" -Version 1.0.1.0
 ```
 
 ## Pasos
