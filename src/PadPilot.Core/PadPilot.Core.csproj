@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>PadPilot.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Acceso HID multiplataforma (USB y Bluetooth) -->
+    <PackageReference Include="HidSharp" Version="2.6.*" />
+  </ItemGroup>
+
+</Project>

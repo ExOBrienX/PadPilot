@@ -1,0 +1,29 @@
+PadPilot — Third-party components / Componentes de terceros
+============================================================
+
+PadPilot uses the following open-source components. Each one is the property of its
+respective authors and is distributed under the license indicated.
+
+PadPilot usa los siguientes componentes de código abierto. Cada uno pertenece a sus
+autores y se distribuye bajo la licencia indicada.
+
+- Avalonia UI ................ MIT ........ https://github.com/AvaloniaUI/Avalonia
+- CommunityToolkit.Mvvm ...... MIT ........ https://github.com/CommunityToolkit/dotnet
+- HidSharp ................... Apache-2.0 . https://www.zer7.com/software/hidsharp
+- NAudio ..................... MIT ........ https://github.com/naudio/NAudio
+- Nefarius.ViGEm.Client ...... MIT ........ https://github.com/nefarius/ViGEm.NET
+- Nefarius.Drivers.HidHide ... MIT ........ https://github.com/nefarius/Nefarius.Drivers.HidHide
+- SkiaSharp .................. MIT ........ https://github.com/mono/SkiaSharp
+- .NET Runtime ............... MIT ........ https://github.com/dotnet/runtime
+
+Optional drivers (not included, downloaded by the user from their official pages):
+Controladores opcionales (no incluidos; se descargan desde sus páginas oficiales):
+
+- ViGEmBus ... https://github.com/nefarius/ViGEmBus
+- HidHide .... https://github.com/nefarius/HidHide
+
+Trademarks / Marcas
+-------------------
+PlayStation, DualSense and DualShock are trademarks of Sony Interactive Entertainment Inc.
+Xbox is a trademark of Microsoft Corporation. PadPilot is not affiliated with, endorsed or
+sponsored by either company.

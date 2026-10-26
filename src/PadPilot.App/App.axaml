@@ -1,0 +1,38 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PadPilot.App.App"
+             RequestedThemeVariant="Dark">
+
+  <!-- Colores propios de PadPilot para cada tema (se usan con DynamicResource) -->
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="PpWindowBg" Color="#141519" />
+          <SolidColorBrush x:Key="PpCardBg" Color="#1E1F25" />
+          <SolidColorBrush x:Key="PpCardBorder" Color="#2A2C33" />
+          <SolidColorBrush x:Key="PpLabel" Color="#9A9CA5" />
+          <SolidColorBrush x:Key="PpSurface" Color="#26282F" />
+          <SolidColorBrush x:Key="PpSurfaceBorder" Color="#3A3D46" />
+          <SolidColorBrush x:Key="PpHighlight" Color="#1D2B45" />
+          <SolidColorBrush x:Key="PpNavActive" Color="#2C2E36" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="PpWindowBg" Color="#F3F4F7" />
+          <SolidColorBrush x:Key="PpCardBg" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="PpCardBorder" Color="#E2E4EA" />
+          <SolidColorBrush x:Key="PpLabel" Color="#5F6470" />
+          <SolidColorBrush x:Key="PpSurface" Color="#ECEEF2" />
+          <SolidColorBrush x:Key="PpSurfaceBorder" Color="#CDD1D9" />
+          <SolidColorBrush x:Key="PpHighlight" Color="#E6EEFC" />
+          <SolidColorBrush x:Key="PpNavActive" Color="#E4E7EE" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+  </Application.Styles>
+</Application>

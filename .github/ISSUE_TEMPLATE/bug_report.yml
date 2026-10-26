@@ -1,0 +1,40 @@
+name: Problema / Bug report
+description: Algo no funciona como debería / Something doesn't work as expected
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: ¿Qué pasó? / What happened?
+      description: Describe el problema y cómo reproducirlo. / Describe the problem and how to reproduce it.
+    validations:
+      required: true
+  - type: dropdown
+    id: controller
+    attributes:
+      label: Mando / Controller
+      multiple: true
+      options: [DualSense, DualSense Edge, DualShock 4, "Genérico / Generic", "Otro / Other"]
+    validations:
+      required: true
+  - type: dropdown
+    id: connection
+    attributes:
+      label: Conexión / Connection
+      multiple: true
+      options: [USB, Bluetooth]
+  - type: input
+    id: version
+    attributes:
+      label: Versión de PadPilot / PadPilot version
+      description: Ajustes → Acerca de / Settings → About
+      placeholder: "1.0.0"
+  - type: input
+    id: windows
+    attributes:
+      label: Windows
+      placeholder: "Windows 11 24H2"
+  - type: textarea
+    id: extra
+    attributes:
+      label: Capturas u otros datos / Screenshots or extra info

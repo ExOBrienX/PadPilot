@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PadPilot — Gestor de mandos para Windows</title>
+  <meta name="description" content="PadPilot: luz, gatillos adaptativos, remapeo, macros, audio y emulación Xbox para DualSense, DualShock 4 y mandos genéricos en Windows. Gratis.">
+  <link rel="icon" href="favicon.ico">
+  <meta property="og:title" content="PadPilot">
+  <meta property="og:description" content="Gestor de mandos para Windows: DualSense, DualShock 4 y genéricos.">
+  <meta property="og:image" content="https://exobrienx.github.io/PadPilot/social.png">
+  <style>
+    :root {
+      --bg: #0f1014; --card: #191a20; --border: #272932; --text: #ececf1; --muted: #9a9ca5;
+      --accent: #3b82f6; --accent2: #06b6d4; --accent3: #6366f1;
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #f5f6f9; --card: #ffffff; --border: #e2e4ea; --text: #16171c; --muted: #5f6470; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text);
+           font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+    a { color: var(--accent); }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+    header { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 20px; text-decoration: none; color: var(--text); }
+    .brand img { width: 32px; height: 32px; }
+    .lang button { background: none; border: 1px solid var(--border); color: var(--muted); padding: 4px 10px;
+                   border-radius: 8px; cursor: pointer; font: inherit; font-size: 14px; }
+    .lang button.on { color: var(--text); border-color: var(--accent); }
+
+    .hero { text-align: center; padding: 56px 0 40px; }
+    .hero img { width: 128px; height: 128px; filter: drop-shadow(0 12px 30px rgba(59,130,246,.35)); }
+    .hero h1 { font-size: clamp(32px, 6vw, 52px); margin: 18px 0 8px; letter-spacing: -0.02em; }
+    .hero p { color: var(--muted); font-size: 19px; max-width: 640px; margin: 0 auto; }
+    .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 28px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 12px;
+           font-weight: 600; text-decoration: none; border: 1px solid var(--border); color: var(--text); background: var(--card); }
+    .btn.primary { background: linear-gradient(135deg, var(--accent3), var(--accent), var(--accent2)); color: #fff; border: 0; }
+    .btn.disabled { opacity: .5; pointer-events: none; }
+    .meta { color: var(--muted); font-size: 13px; margin-top: 12px; }
+
+    section { padding: 36px 0; }
+    h2 { font-size: 26px; margin: 0 0 18px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
+    .card h3 { margin: 0 0 6px; font-size: 17px; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .icon { font-size: 22px; margin-bottom: 8px; }
+
+    table { width: 100%; border-collapse: collapse; }
+    td { padding: 12px 8px; border-top: 1px solid var(--border); vertical-align: top; }
+    td:first-child { font-weight: 600; white-space: nowrap; width: 1%; }
+    td p { margin: 0; color: var(--muted); }
+
+    details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    summary { cursor: pointer; font-weight: 600; }
+    details p { color: var(--muted); margin: 10px 0 0; }
+
+    .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+    .shots img { width: 100%; border-radius: 12px; border: 1px solid var(--border); display: block; }
+    footer { color: var(--muted); font-size: 13px; padding: 36px 0 48px; border-top: 1px solid var(--border); margin-top: 24px; }
+    [data-lang="en"] .es, [data-lang="es"] .en { display: none; }
+  </style>
+</head>
+<body data-lang="es">
+  <div class="wrap">
+    <header>
+      <a class="brand" href="#"><img src="icon.png" alt="">PadPilot</a>
+      <div class="lang">
+        <button data-set="es" class="on">ES</button>
+        <button data-set="en">EN</button>
+      </div>
+    </header>
+
+    <div class="hero">
+      <img src="icon.png" alt="PadPilot">
+      <h1>PadPilot</h1>
+      <p class="es">Gestor de mandos para Windows. Configura tu DualSense, DualShock 4 o mando genérico: luz, gatillos, botones, audio y emulación Xbox.</p>
+      <p class="en">Controller manager for Windows. Set up your DualSense, DualShock 4 or generic controller: light, triggers, buttons, audio and Xbox emulation.</p>
+      <div class="cta">
+        <a class="btn primary" id="download" href="#">
+          <span class="es">Descargar para Windows</span><span class="en">Download for Windows</span>
+        </a>
+        <a class="btn" id="donate" href="#">☕ <span class="es">Apoyar con una donación</span><span class="en">Support with a donation</span></a>
+      </div>
+      <div class="meta"><span class="es">Gratis · Windows 10/11 (64 bits) · Versión</span><span class="en">Free · Windows 10/11 (64-bit) · Version</span> <span id="version">1.0.0</span></div>
+    </div>
+
+    <section>
+      <h2 class="es">Funciones</h2><h2 class="en">Features</h2>
+      <div class="grid">
+        <div class="card"><div class="icon">🎮</div>
+          <h3 class="es">Varios mandos a la vez</h3><h3 class="en">Multiple controllers</h3>
+          <p class="es">DualSense, DualSense Edge, DualShock 4 y mandos genéricos, por USB o Bluetooth, con jugador 1-4.</p>
+          <p class="en">DualSense, DualSense Edge, DualShock 4 and generic controllers, via USB or Bluetooth, as players 1-4.</p></div>
+        <div class="card"><div class="icon">💡</div>
+          <h3 class="es">Barra de luz</h3><h3 class="en">Light bar</h3>
+          <p class="es">Color por jugador o por mando, intensidad y avisos de batería baja y carga con prioridad sobre los juegos.</p>
+          <p class="en">Color per player or per controller, brightness, and low-battery and charging indicators that override games.</p></div>
+        <div class="card"><div class="icon">🎯</div>
+          <h3 class="es">Gatillos adaptativos</h3><h3 class="en">Adaptive triggers</h3>
+          <p class="es">Perfiles de un clic (pistola, escopeta, ametralladora, arco, coche) y ajuste fino.</p>
+          <p class="en">One-click presets (pistol, shotgun, machine gun, bow, car) and fine tuning.</p></div>
+        <div class="card"><div class="icon">⌨️</div>
+          <h3 class="es">Remapeo y macros</h3><h3 class="en">Remapping &amp; macros</h3>
+          <p class="es">Asigna botones Xbox, teclas, atajos de Windows o secuencias de macros a cualquier botón.</p>
+          <p class="en">Assign Xbox buttons, keys, Windows shortcuts or macro sequences to any button.</p></div>
+        <div class="card"><div class="icon">🕹️</div>
+          <h3 class="es">Emulación Xbox 360</h3><h3 class="en">Xbox 360 emulation</h3>
+          <p class="es">Para juegos que solo aceptan mandos Xbox, respetando el orden de jugadores y con vibración.</p>
+          <p class="en">For games that only accept Xbox controllers, keeping player order, with rumble.</p></div>
+        <div class="card"><div class="icon">🧭</div>
+          <h3 class="es">Calibración y zona muerta</h3><h3 class="en">Calibration &amp; dead zones</h3>
+          <p class="es">Corrige sticks que se mueven solos (drift) y prueba sticks, gatillos, botones y touchpad en vivo.</p>
+          <p class="en">Fix drifting sticks and test sticks, triggers, buttons and the touchpad live.</p></div>
+        <div class="card"><div class="icon">🎧</div>
+          <h3 class="es">Micrófono y audífonos</h3><h3 class="en">Microphone &amp; headphones</h3>
+          <p class="es">Por USB: nivel del micrófono, botón Mute con LED, escucharte, y prueba de los audífonos del mando.</p>
+          <p class="en">Over USB: mic level, Mute button with LED, self-monitoring and controller headphone test.</p></div>
+        <div class="card"><div class="icon">🌗</div>
+          <h3 class="es">Ligero y a tu gusto</h3><h3 class="en">Light and tailored</h3>
+          <p class="es">Vive en la bandeja, tema claro u oscuro, español e inglés, inicio con Windows.</p>
+          <p class="en">Lives in the tray, light or dark theme, English and Spanish, starts with Windows.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="es">Capturas</h2><h2 class="en">Screenshots</h2>
+      <div class="shots">
+        <img src="screenshots/01-light.png" alt="Light bar" loading="lazy">
+        <img src="screenshots/02-triggers.png" alt="Adaptive triggers" loading="lazy">
+        <img src="screenshots/04-test.png" alt="Live tester" loading="lazy">
+        <img src="screenshots/05-settings.png" alt="Settings" loading="lazy">
+      </div>
+    </section>
+
+    <section>
+      <h2 class="es">Requisitos</h2><h2 class="en">Requirements</h2>
+      <div class="card">
+        <table>
+          <tr><td>Windows 10/11</td><td><p class="es">64 bits. No necesita instalar .NET: viene incluido.</p><p class="en">64-bit. No .NET install needed: it's included.</p></td></tr>
+          <tr><td><a href="https://github.com/nefarius/ViGEmBus/releases/latest">ViGEmBus</a></td>
+              <td><p class="es">Solo para la emulación Xbox 360. Gratuito.</p><p class="en">Only for Xbox 360 emulation. Free.</p></td></tr>
+          <tr><td><a href="https://github.com/nefarius/HidHide/releases/latest">HidHide</a></td>
+              <td><p class="es">Opcional: oculta el mando original a los juegos durante la emulación. Gratuito.</p>
+                  <p class="en">Optional: hides the physical controller from games during emulation. Free.</p></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="es">Preguntas frecuentes</h2><h2 class="en">FAQ</h2>
+      <details>
+        <summary><span class="es">Windows muestra "Windows protegió su PC". ¿Es seguro?</span><span class="en">Windows says "Windows protected your PC". Is it safe?</span></summary>
+        <p class="es">Ese aviso (SmartScreen) aparece con programas nuevos que aún no tienen reputación. Pulsa "Más información" y luego "Ejecutar de todas formas". Si tienes <b>Smart App Control</b> activado (Windows 11), puede bloquearla sin esa opción: en ese caso usa la versión de Microsoft Store, que va firmada.</p>
+        <p class="en">That warning (SmartScreen) appears for new apps that don't have reputation yet. Click "More info" and then "Run anyway". If <b>Smart App Control</b> is on (Windows 11), it may block the app without that option: use the Microsoft Store version instead, which is signed.</p>
+      </details>
+      <details>
+        <summary><span class="es">¿Funciona con Steam abierto?</span><span class="en">Does it work with Steam open?</span></summary>
+        <p class="es">Sí. Si Steam cambia la luz del mando, PadPilot la restablece. Para evitar conflictos con los botones, desactiva "Soporte de configuración para PlayStation" en Steam.</p>
+        <p class="en">Yes. If Steam changes the controller light, PadPilot restores it. To avoid button conflicts, turn off "PlayStation Configuration Support" in Steam.</p>
+      </details>
+      <details>
+        <summary><span class="es">¿El micrófono funciona por Bluetooth?</span><span class="en">Does the microphone work over Bluetooth?</span></summary>
+        <p class="es">No. En PC, el audio del mando (micrófono y audífonos) solo está disponible por cable USB.</p>
+        <p class="en">No. On PC, the controller's audio (microphone and headphones) is only available over USB.</p>
+      </details>
+      <details>
+        <summary><span class="es">¿Dónde se guarda mi configuración?</span><span class="en">Where are my settings stored?</span></summary>
+        <p class="es">En %AppData%\PadPilot. Cada mando recuerda su configuración y la aplica al conectarse.</p>
+        <p class="en">In %AppData%\PadPilot. Each controller remembers its settings and applies them when it connects.</p>
+      </details>
+    </section>
+
+    <footer>
+      <p><span class="es">¿Problemas o sugerencias?</span><span class="en">Problems or suggestions?</span>
+         <a id="issues" href="#"><span class="es">Abre un reporte en GitHub</span><span class="en">Open an issue on GitHub</span></a>.</p>
+      <p class="es">PlayStation, DualSense y DualShock son marcas de Sony Interactive Entertainment. Xbox es una marca de Microsoft. PadPilot no está afiliado a ninguna de ellas.</p>
+      <p class="en">PlayStation, DualSense and DualShock are trademarks of Sony Interactive Entertainment. Xbox is a trademark of Microsoft. PadPilot is not affiliated with either.</p>
+      <p>© 2026 ExO · <span class="es">Código abierto bajo</span><span class="en">Open source under</span> <a href="https://github.com/ExOBrienX/PadPilot/blob/main/LICENSE">GPL-3.0</a> · <a href="privacy.html"><span class="es">Privacidad</span><span class="en">Privacy</span></a></p>
+    </footer>
+  </div>
+
+  <script>
+    // ---- Completar al publicar ----
+    const CONFIG = {
+      repo: "https://github.com/ExOBrienX/PadPilot",
+      kofi: "",   // p. ej. "https://ko-fi.com/tu_usuario"
+      version: "1.0.0",
+    };
+
+    const link = (id, url) => {
+      const a = document.getElementById(id);
+      if (url) a.href = url; else a.classList.add("disabled");
+    };
+    link("download", CONFIG.repo && CONFIG.repo + "/releases/latest");
+    link("donate", CONFIG.kofi);
+    link("issues", CONFIG.repo && CONFIG.repo + "/issues");
+    document.getElementById("version").textContent = CONFIG.version;
+
+    const setLang = lang => {
+      document.body.dataset.lang = lang;
+      document.documentElement.lang = lang;
+      document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.set === lang));
+      try { localStorage.setItem("lang", lang); } catch (e) {}
+    };
+    document.querySelectorAll(".lang button").forEach(b => b.addEventListener("click", () => setLang(b.dataset.set)));
+    let saved = null;
+    try { saved = localStorage.getItem("lang"); } catch (e) {}
+    setLang(saved || (navigator.language || "es").startsWith("es") ? (saved || "es") : "en");
+  </script>
+</body>
+</html>

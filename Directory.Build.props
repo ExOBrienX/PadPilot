@@ -1,0 +1,19 @@
+<Project>
+  <!-- Ajustes comunes a todos los proyectos -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <!-- Menos memoria: sin datos de cultura ICU (la app no los necesita) -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+
+    <!-- Datos del producto: aparecen en Propiedades → Detalles del .exe y en "Acerca de" -->
+    <Version>1.0.0</Version>
+    <Product>PadPilot</Product>
+    <Authors>ExO</Authors>
+    <Company>ExO</Company>
+    <Copyright>© 2026 ExO</Copyright>
+    <Description>Gestor de mandos DualSense, DualShock 4 y genéricos para Windows</Description>
+  </PropertyGroup>
+</Project>

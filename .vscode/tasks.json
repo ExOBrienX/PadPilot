@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "${workspaceFolder}/PadPilot.slnx"],
+      "problemMatcher": "$msCompile",
+      "group": { "kind": "build", "isDefault": true }
+    },
+    {
+      "label": "publish",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "publish", "${workspaceFolder}/src/PadPilot.App/PadPilot.App.csproj",
+        "-c", "Release", "-r", "win-x64", "--self-contained",
+        "-p:PublishSingleFile=true", "-p:PublishReadyToRun=true",
+        "-o", "${workspaceFolder}/publish"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

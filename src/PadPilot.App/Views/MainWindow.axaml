@@ -1,0 +1,747 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:PadPilot.App.ViewModels"
+        xmlns:svc="using:PadPilot.App.Services"
+        xmlns:l="using:PadPilot.App.Services"
+        xmlns:proto="using:PadPilot.Core.Protocol"
+        x:Class="PadPilot.App.Views.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="PadPilot"
+        Icon="/Assets/padpilot.ico"
+        Width="620" Height="820" MinWidth="520" MinHeight="520"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource PpWindowBg}">
+
+  <Window.Styles>
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource PpCardBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource PpCardBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="14" />
+      <Setter Property="Padding" Value="16" />
+    </Style>
+    <Style Selector="TextBlock.label">
+      <Setter Property="Foreground" Value="{DynamicResource PpLabel}" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="TextBlock.mono">
+      <Setter Property="FontFamily" Value="Consolas" />
+      <Setter Property="TextWrapping" Value="NoWrap" />
+    </Style>
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="MinHeight" Value="36" />
+      <Setter Property="Padding" Value="10,0" />
+    </Style>
+
+    <!-- Navegación superior -->
+    <Style Selector="Button.nav">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Padding" Value="12,6" />
+      <Setter Property="CornerRadius" Value="8" />
+    </Style>
+    <Style Selector="Button.nav.active">
+      <Setter Property="Background" Value="{DynamicResource PpNavActive}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="ListBox.chips">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="ListBox.chips ListBoxItem">
+      <Setter Property="Padding" Value="12,8" />
+      <Setter Property="Margin" Value="0,0,8,8" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Background" Value="{DynamicResource PpCardBg}" />
+    </Style>
+    <Style Selector="ListBox.swatches ListBoxItem">
+      <Setter Property="Padding" Value="3" />
+      <Setter Property="Margin" Value="0,0,4,4" />
+      <Setter Property="CornerRadius" Value="17" />
+    </Style>
+    <Style Selector="ListBox.presets ListBoxItem">
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="Margin" Value="0,0,6,6" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Background" Value="{DynamicResource PpSurface}" />
+    </Style>
+
+    <!-- Probador -->
+    <Style Selector="Border.light">
+      <Setter Property="Background" Value="{DynamicResource PpSurface}" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="MinWidth" Value="46" />
+      <Setter Property="Height" Value="34" />
+      <Setter Property="Margin" Value="0,0,6,6" />
+      <Setter Property="Padding" Value="8,0" />
+    </Style>
+    <Style Selector="Border.light.on">
+      <Setter Property="Background" Value="#3B82F6" />
+    </Style>
+    <Style Selector="Border.light.on TextBlock">
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Border.stick">
+      <Setter Property="Width" Value="110" />
+      <Setter Property="Height" Value="110" />
+      <Setter Property="CornerRadius" Value="55" />
+      <Setter Property="Background" Value="{DynamicResource PpSurface}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource PpSurfaceBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="Border.dot">
+      <Setter Property="Width" Value="16" />
+      <Setter Property="Height" Value="16" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Background" Value="#3B82F6" />
+    </Style>
+    <Style Selector="Border.dot.out">
+      <Setter Property="Width" Value="10" />
+      <Setter Property="Height" Value="10" />
+      <Setter Property="Margin" Value="3" />
+      <Setter Property="Background" Value="#22C55E" />
+    </Style>
+  </Window.Styles>
+
+  <DockPanel Margin="18">
+
+    <!-- ===================== Encabezado ===================== -->
+    <Grid DockPanel.Dock="Top" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,16">
+      <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+        <Image Source="/Assets/padpilot.png" Width="30" Height="30" />
+        <TextBlock Text="PadPilot" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" />
+      </StackPanel>
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+        <Button Classes="nav" Classes.active="{Binding IsControllersPage}" Content="{l:T nav.controllers}"
+                Command="{Binding NavigateCommand}" CommandParameter="0" />
+        <Button Classes="nav" Classes.active="{Binding IsSettingsPage}" Content="{l:T nav.settings}"
+                Command="{Binding NavigateCommand}" CommandParameter="1" />
+        <Button Classes="nav" Classes.active="{Binding IsAboutPage}" Content="{l:T nav.about}"
+                Command="{Binding NavigateCommand}" CommandParameter="2" />
+      </StackPanel>
+    </Grid>
+
+    <Panel>
+
+      <!-- ===================== Página: Mandos ===================== -->
+      <DockPanel IsVisible="{Binding IsControllersPage}">
+
+        <!-- Emulación Xbox (global) -->
+        <Border DockPanel.Dock="Top" Classes="card" Margin="0,0,0,14" Padding="16,12">
+          <StackPanel Spacing="8">
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Spacing="2" VerticalAlignment="Center">
+                <TextBlock Classes="section" Text="{l:T emu.title}" />
+                <TextBlock Classes="label" Text="{Binding EmulationStatus}" />
+              </StackPanel>
+              <ToggleSwitch Grid.Column="1" IsChecked="{Binding EmulateXbox}" OnContent="" OffContent=""
+                            VerticalAlignment="Center" Margin="12,0,0,0" />
+            </Grid>
+            <StackPanel Spacing="4" IsVisible="{Binding EmulateXbox}">
+              <CheckBox Content="{l:T hide.check}" IsChecked="{Binding HideControllers}" />
+              <TextBlock Classes="label" Text="{Binding HidHideStatus}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="{l:T btn.download}" Command="{Binding OpenHidHideDownloadCommand}"
+                        IsVisible="{Binding HidHideNeedsInstall}" />
+                <Button Content="{l:T btn.restartAdmin}" Command="{Binding RestartAsAdminCommand}"
+                        IsVisible="{Binding HidHideNeedsAdmin}" />
+              </StackPanel>
+            </StackPanel>
+          </StackPanel>
+        </Border>
+
+        <!-- Lista de mandos: fila arriba (vertical) o columna a la izquierda (horizontal) -->
+        <ListBox DockPanel.Dock="Top" Classes="chips" Margin="0,0,0,6"
+                 IsVisible="{Binding !IsHorizontal}"
+                 ItemsSource="{Binding Controllers}" SelectedItem="{Binding SelectedController}">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:ControllerViewModel">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Border Width="12" Height="12" CornerRadius="6" Background="{Binding LightbarBrush}" VerticalAlignment="Center" />
+                <StackPanel>
+                  <TextBlock Text="{Binding ChipTitle}" FontWeight="SemiBold" />
+                  <TextBlock Classes="label" Text="{Binding BatteryText}" />
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <ListBox DockPanel.Dock="Left" Classes="chips" Width="210" Margin="0,0,10,0"
+                 IsVisible="{Binding IsHorizontal}"
+                 ItemsSource="{Binding Controllers}" SelectedItem="{Binding SelectedController}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="vm:ControllerViewModel">
+              <StackPanel Orientation="Horizontal" Spacing="10">
+                <Border Width="12" Height="12" CornerRadius="6" Background="{Binding LightbarBrush}" VerticalAlignment="Center" />
+                <StackPanel>
+                  <TextBlock Text="{Binding ChipTitle}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                  <TextBlock Classes="label" Text="{Binding BatteryText}" />
+                </StackPanel>
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Panel>
+          <StackPanel IsVisible="{Binding IsEmpty}" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8" MaxWidth="360">
+            <Image Source="/Assets/padpilot.png" Width="64" Height="64" Opacity="0.6" />
+            <TextBlock Text="{l:T empty.title}" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Classes="label" HorizontalAlignment="Center" TextAlignment="Center" Text="{l:T empty.body}" />
+          </StackPanel>
+
+          <ContentControl Content="{Binding SelectedController}">
+            <ContentControl.ContentTemplate>
+              <DataTemplate x:DataType="vm:ControllerViewModel">
+                <DockPanel>
+
+                  <!-- Mando seleccionado: nombre, jugador y batería -->
+                  <Border DockPanel.Dock="Top" Classes="card" Margin="0,0,0,8">
+                    <StackPanel Spacing="12">
+                      <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="2">
+                          <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" />
+                          <TextBlock Classes="label" Text="{Binding Subtitle}" />
+                        </StackPanel>
+                        <ComboBox Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
+                                  ItemsSource="{Binding SlotNames}" SelectedIndex="{Binding SlotIndex}" />
+                      </Grid>
+                      <StackPanel Spacing="6">
+                        <Grid ColumnDefinitions="*,Auto">
+                          <TextBlock Classes="section" Text="{l:T battery}" />
+                          <TextBlock Grid.Column="1" Text="{Binding BatteryText}" />
+                        </Grid>
+                        <ProgressBar Minimum="0" Maximum="100" Height="8" MinHeight="8" CornerRadius="4"
+                                     Value="{Binding BatteryPercent}" Foreground="{Binding BatteryBrush}" />
+                      </StackPanel>
+                    </StackPanel>
+                  </Border>
+
+                  <TabControl SelectedIndex="{Binding SelectedTab}" Padding="0,8,0,0">
+
+                    <!-- 0 · Luz -->
+                    <TabItem Header="{l:T tab.light}" IsVisible="{Binding HasLightbar}">
+                      <ScrollViewer>
+                        <Border Classes="card">
+                          <StackPanel Spacing="12">
+                            <TextBlock Classes="section" Text="{l:T light.title}" />
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                              <RadioButton Content="{l:T light.slot}" IsChecked="{Binding UseSlotColor}" />
+                              <RadioButton Content="{l:T light.own}" IsChecked="{Binding UseOwnColor}" />
+                            </StackPanel>
+                            <TextBlock Classes="label" Text="{Binding ColorTargetText}" />
+                            <ListBox Classes="swatches" Background="Transparent"
+                                     ItemsSource="{Binding Presets}" SelectedItem="{Binding SelectedPreset}">
+                              <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                  <WrapPanel />
+                                </ItemsPanelTemplate>
+                              </ListBox.ItemsPanel>
+                              <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="vm:ColorPreset">
+                                  <Border Width="26" Height="26" CornerRadius="13" Background="{Binding Brush}"
+                                          BorderBrush="{DynamicResource PpSurfaceBorder}" BorderThickness="1"
+                                          ToolTip.Tip="{Binding Name}" />
+                                </DataTemplate>
+                              </ListBox.ItemTemplate>
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" Spacing="10">
+                              <Border Width="26" Height="26" CornerRadius="13" Background="{Binding LightbarBrush}"
+                                      BorderBrush="{DynamicResource PpSurfaceBorder}" BorderThickness="1" VerticalAlignment="Center" />
+                              <Button Content="{l:T light.custom}">
+                                <Button.Flyout>
+                                  <Flyout Placement="BottomEdgeAlignedLeft">
+                                    <ColorView Color="{Binding CustomColor}" Width="300" IsAlphaEnabled="False" IsAlphaVisible="False" />
+                                  </Flyout>
+                                </Button.Flyout>
+                              </Button>
+                            </StackPanel>
+                            <Grid ColumnDefinitions="Auto,*">
+                              <TextBlock Classes="label" Text="{l:T light.intensity}" VerticalAlignment="Center" Margin="0,0,12,0" />
+                              <Slider Grid.Column="1" Minimum="5" Maximum="100" Value="{Binding LightbarIntensity}" />
+                            </Grid>
+                            <Button Content="{l:T light.rumble}" Command="{Binding TestRumbleCommand}" />
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+
+                    <!-- 1 · Gatillos adaptativos -->
+                    <TabItem Header="{l:T tab.triggers}" IsVisible="{Binding SupportsTriggers}">
+                      <ScrollViewer>
+                        <Border Classes="card">
+                          <StackPanel Spacing="12">
+                            <TextBlock Classes="section" Text="{l:T trig.presets}" />
+                            <ListBox Classes="presets" Background="Transparent"
+                                     ItemsSource="{Binding TriggerPresetList}" SelectedItem="{Binding SelectedTriggerPreset}">
+                              <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                  <WrapPanel />
+                                </ItemsPanelTemplate>
+                              </ListBox.ItemsPanel>
+                              <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="proto:TriggerPreset">
+                                  <TextBlock Text="{Binding Name}" ToolTip.Tip="{Binding Description}" />
+                                </DataTemplate>
+                              </ListBox.ItemTemplate>
+                            </ListBox>
+                            <TextBlock Classes="label"
+                                       Text="{Binding SelectedTriggerPreset.Description, FallbackValue={l:T trig.custom}}" />
+
+                            <TextBlock Classes="section" Text="{l:T trig.fine}" Margin="0,8,0,0" />
+                            <Grid ColumnDefinitions="*,16,*">
+                              <StackPanel Spacing="4">
+                                <TextBlock Text="L2" FontWeight="SemiBold" />
+                                <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding TriggerModes}" SelectedIndex="{Binding LeftTriggerMode}" />
+                                <TextBlock Classes="label" Text="{l:T trig.strength}" Margin="0,6,0,0" />
+                                <Slider Minimum="1" Maximum="8" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding LeftTriggerStrength}" />
+                                <TextBlock Classes="label" Text="{l:T trig.start}" />
+                                <Slider Minimum="0" Maximum="9" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding LeftTriggerStart}" />
+                                <StackPanel IsVisible="{Binding LeftIsVibration}">
+                                  <TextBlock Classes="label" Text="{l:T trig.freq}" />
+                                  <Slider Minimum="5" Maximum="80" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding LeftTriggerFrequency}" />
+                                </StackPanel>
+                              </StackPanel>
+                              <StackPanel Grid.Column="2" Spacing="4">
+                                <TextBlock Text="R2" FontWeight="SemiBold" />
+                                <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding TriggerModes}" SelectedIndex="{Binding RightTriggerMode}" />
+                                <TextBlock Classes="label" Text="{l:T trig.strength}" Margin="0,6,0,0" />
+                                <Slider Minimum="1" Maximum="8" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding RightTriggerStrength}" />
+                                <TextBlock Classes="label" Text="{l:T trig.start}" />
+                                <Slider Minimum="0" Maximum="9" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding RightTriggerStart}" />
+                                <StackPanel IsVisible="{Binding RightIsVibration}">
+                                  <TextBlock Classes="label" Text="{l:T trig.freq}" />
+                                  <Slider Minimum="5" Maximum="80" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding RightTriggerFrequency}" />
+                                </StackPanel>
+                              </StackPanel>
+                            </Grid>
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+
+                    <!-- 2 · Botones -->
+                    <TabItem Header="{l:T tab.buttons}">
+                      <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Spacing="6" Margin="2,0,2,10">
+                          <TextBlock Classes="label" Text="{Binding XboxStatus}" />
+                          <TextBlock Classes="label" Text="{l:T btn.hint}" />
+                        </StackPanel>
+                        <Button DockPanel.Dock="Bottom" Content="{l:T btn.reset}" Margin="0,10,0,0" Command="{Binding ResetMappingsCommand}" />
+                        <ScrollViewer>
+                          <ItemsControl ItemsSource="{Binding ButtonMappings}">
+                            <ItemsControl.ItemTemplate>
+                              <DataTemplate x:DataType="vm:ButtonMapItem">
+                                <Grid ColumnDefinitions="*,230" Margin="2,0,8,8">
+                                  <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Classes="label" Text="{Binding DefaultHint}" />
+                                  </StackPanel>
+                                  <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" MaxDropDownHeight="360"
+                                            ItemsSource="{Binding Actions}" SelectedItem="{Binding SelectedAction}">
+                                    <ComboBox.ItemTemplate>
+                                      <DataTemplate x:DataType="svc:ButtonAction">
+                                        <TextBlock Text="{Binding Name}" />
+                                      </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                  </ComboBox>
+                                </Grid>
+                              </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                          </ItemsControl>
+                        </ScrollViewer>
+                      </DockPanel>
+                    </TabItem>
+
+                    <!-- 3 · Probar -->
+                    <TabItem Header="{l:T tab.test}">
+                      <ScrollViewer>
+                        <Border Classes="card" DataContext="{Binding Tester}" x:DataType="vm:InputTesterViewModel">
+                          <StackPanel Spacing="16">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                              <StackPanel Spacing="6" HorizontalAlignment="Center">
+                                <TextBlock Classes="section" Text="{l:T test.left}" HorizontalAlignment="Center" />
+                                <Border Classes="stick">
+                                  <Canvas>
+                                    <Ellipse Width="{Binding LeftRing}" Height="{Binding LeftRing}"
+                                             Canvas.Left="{Binding LeftRingOffset}" Canvas.Top="{Binding LeftRingOffset}"
+                                             Stroke="#F59E0B" StrokeThickness="1" StrokeDashArray="3,2" />
+                                    <Border Classes="dot" Canvas.Left="{Binding LeftDotX}" Canvas.Top="{Binding LeftDotY}" />
+                                    <Border Classes="dot out" Canvas.Left="{Binding LeftOutX}" Canvas.Top="{Binding LeftOutY}" />
+                                  </Canvas>
+                                </Border>
+                                <TextBlock Classes="label mono" Text="{Binding LeftStickText}" HorizontalAlignment="Center" />
+                                <TextBlock Classes="label mono" Text="{Binding LeftOutText}" HorizontalAlignment="Center" Foreground="#22C55E" />
+                              </StackPanel>
+
+                              <StackPanel Grid.Column="1" Spacing="6" Margin="20,24,20,0">
+                                <TextBlock Classes="label mono" Text="{Binding L2Value, StringFormat='L2  {0}'}" />
+                                <ProgressBar Minimum="0" Maximum="255" Height="10" MinHeight="10" Value="{Binding L2Value}" />
+                                <TextBlock Classes="label mono" Text="{Binding R2Value, StringFormat='R2  {0}'}" Margin="0,8,0,0" />
+                                <ProgressBar Minimum="0" Maximum="255" Height="10" MinHeight="10" Value="{Binding R2Value}" />
+                              </StackPanel>
+
+                              <StackPanel Grid.Column="2" Spacing="6" HorizontalAlignment="Center">
+                                <TextBlock Classes="section" Text="{l:T test.right}" HorizontalAlignment="Center" />
+                                <Border Classes="stick">
+                                  <Canvas>
+                                    <Ellipse Width="{Binding RightRing}" Height="{Binding RightRing}"
+                                             Canvas.Left="{Binding RightRingOffset}" Canvas.Top="{Binding RightRingOffset}"
+                                             Stroke="#F59E0B" StrokeThickness="1" StrokeDashArray="3,2" />
+                                    <Border Classes="dot" Canvas.Left="{Binding RightDotX}" Canvas.Top="{Binding RightDotY}" />
+                                    <Border Classes="dot out" Canvas.Left="{Binding RightOutX}" Canvas.Top="{Binding RightOutY}" />
+                                  </Canvas>
+                                </Border>
+                                <TextBlock Classes="label mono" Text="{Binding RightStickText}" HorizontalAlignment="Center" />
+                                <TextBlock Classes="label mono" Text="{Binding RightOutText}" HorizontalAlignment="Center" Foreground="#22C55E" />
+                              </StackPanel>
+                            </Grid>
+
+                            <StackPanel Spacing="6">
+                              <TextBlock Classes="label" Text="{l:T test.legend}" />
+                              <Grid ColumnDefinitions="*,16,*">
+                                <StackPanel>
+                                  <TextBlock Classes="label" Text="{Binding LeftDeadzone, StringFormat={l:T test.dzLeft}}" />
+                                  <Slider Minimum="0" Maximum="60" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding LeftDeadzone}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                  <TextBlock Classes="label" Text="{Binding RightDeadzone, StringFormat={l:T test.dzRight}}" />
+                                  <Slider Minimum="0" Maximum="60" TickFrequency="1" IsSnapToTickEnabled="True" Value="{Binding RightDeadzone}" />
+                                </StackPanel>
+                              </Grid>
+                              <Grid ColumnDefinitions="Auto,*">
+                                <Button Content="{l:T test.calibrate}" Command="{Binding CalibrateCommand}" VerticalAlignment="Top" />
+                                <TextBlock Grid.Column="1" Classes="label" Margin="10,0,0,0" VerticalAlignment="Center" Text="{Binding CalibrationText}" />
+                              </Grid>
+                            </StackPanel>
+
+                            <StackPanel Spacing="8">
+                              <TextBlock Classes="section" Text="{l:T test.buttons}" />
+                              <ItemsControl ItemsSource="{Binding Buttons}">
+                                <ItemsControl.ItemsPanel>
+                                  <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                  </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                  <DataTemplate x:DataType="vm:ButtonLight">
+                                    <Border Classes="light" Classes.on="{Binding IsPressed}">
+                                      <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                  </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                              </ItemsControl>
+                            </StackPanel>
+
+                            <StackPanel Spacing="8" IsVisible="{Binding HasTouchpad}">
+                              <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Classes="section" Text="{l:T test.touchpad}" />
+                                <TextBlock Grid.Column="1" Classes="label" Text="{Binding TouchText}" />
+                              </Grid>
+                              <Border Width="300" Height="{Binding TouchHeight}" HorizontalAlignment="Left"
+                                      Background="{DynamicResource PpSurface}" BorderBrush="{DynamicResource PpSurfaceBorder}"
+                                      BorderThickness="1" CornerRadius="10" ClipToBounds="True">
+                                <Canvas>
+                                  <Ellipse Width="22" Height="22" Fill="#3B82F6" IsVisible="{Binding Touch0Visible}"
+                                           Canvas.Left="{Binding Touch0X}" Canvas.Top="{Binding Touch0Y}" />
+                                  <Ellipse Width="22" Height="22" Fill="#EC4899" IsVisible="{Binding Touch1Visible}"
+                                           Canvas.Left="{Binding Touch1X}" Canvas.Top="{Binding Touch1Y}" />
+                                </Canvas>
+                              </Border>
+                            </StackPanel>
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+
+                    <!-- 4 · Configurar (mandos genéricos) -->
+                    <TabItem Header="{l:T tab.setup}" IsVisible="{Binding IsGeneric}">
+                      <ScrollViewer>
+                        <Border Classes="card" DataContext="{Binding Setup}" x:DataType="vm:GenericSetupViewModel">
+                          <StackPanel Spacing="12">
+                            <TextBlock Classes="section" Text="{l:T setup.title}" />
+                            <TextBlock Classes="label" Text="{Binding ModelText}" />
+                            <TextBlock Text="{Binding LayoutName}" />
+                            <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsIdle}">
+                              <Button Classes="accent" Content="{l:T setup.wizard}" Command="{Binding StartWizardCommand}" />
+                              <Button Content="{l:T setup.useStandard}" Command="{Binding UseStandardCommand}" />
+                            </StackPanel>
+                            <Border IsVisible="{Binding IsRunning}" Background="{DynamicResource PpHighlight}" CornerRadius="10" Padding="16">
+                              <StackPanel Spacing="10">
+                                <TextBlock Classes="label" Text="{Binding Progress}" />
+                                <TextBlock Text="{Binding Prompt}" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                <TextBlock Classes="label" Text="{l:T setup.skipHint}" />
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                  <Button Content="{l:T setup.skip}" Command="{Binding SkipCommand}" />
+                                  <Button Content="{l:T setup.cancel}" Command="{Binding CancelCommand}" />
+                                </StackPanel>
+                              </StackPanel>
+                            </Border>
+                            <TextBlock Classes="label" Text="{Binding Prompt}" IsVisible="{Binding IsIdle}" />
+                            <TextBlock Classes="section" Text="{l:T setup.current}" Margin="0,6,0,0" />
+                            <ItemsControl ItemsSource="{Binding Summary}">
+                              <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:LayoutRow">
+                                  <Grid ColumnDefinitions="150,*" Margin="0,0,0,4">
+                                    <TextBlock Text="{Binding Control}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1" Classes="label" Text="{Binding Source}" VerticalAlignment="Center" />
+                                  </Grid>
+                                </DataTemplate>
+                              </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock Classes="label" Text="{l:T setup.note}" />
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+
+                    <!-- 5 · Audio -->
+                    <TabItem Header="{l:T tab.audio}" IsVisible="{Binding HasAudio}">
+                      <ScrollViewer>
+                        <Border Classes="card" DataContext="{Binding Audio}" x:DataType="vm:AudioViewModel">
+                          <StackPanel Spacing="14">
+                            <TextBlock Classes="label" Text="{Binding StatusText}"
+                                       IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                            <StackPanel Spacing="8" IsVisible="{Binding HasMic}">
+                              <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel>
+                                  <TextBlock Classes="section" Text="{l:T audio.mic}" />
+                                  <TextBlock Classes="label" Text="{Binding MicName}" />
+                                </StackPanel>
+                                <ToggleButton Grid.Column="1" Content="{l:T audio.muted}" IsChecked="{Binding MicMuted}" VerticalAlignment="Center" />
+                              </Grid>
+                              <TextBlock Classes="label" Text="{l:T audio.level}" />
+                              <ProgressBar Minimum="0" Maximum="100" Height="12" MinHeight="12" CornerRadius="6" Value="{Binding MicLevel}" Foreground="#22C55E" />
+                              <Grid ColumnDefinitions="Auto,*">
+                                <TextBlock Classes="label" Text="{Binding MicVolume, StringFormat={l:T audio.volume}}"
+                                           VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="100" />
+                                <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding MicVolume}" />
+                              </Grid>
+                              <CheckBox Content="{l:T audio.muteButton}" IsChecked="{Binding MuteButtonMic}" />
+
+                              <TextBlock Classes="section" Text="{l:T audio.monitor}" Margin="0,6,0,0" />
+                              <ComboBox ItemsSource="{Binding MonitorTargets}" SelectedIndex="{Binding MonitorTarget}" MinWidth="280" />
+                              <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ToggleButton Content="{l:T audio.live}" IsChecked="{Binding IsMonitoring}" />
+                                <Button Content="{l:T audio.record}" Command="{Binding RecordCommand}" />
+                                <TextBlock Classes="label" Text="{l:T audio.recording}" IsVisible="{Binding IsRecording}" VerticalAlignment="Center" />
+                              </StackPanel>
+                              <TextBlock Classes="label" Text="{l:T audio.feedback}" />
+                            </StackPanel>
+
+                            <StackPanel Spacing="8" IsVisible="{Binding HasHeadphones}">
+                              <TextBlock Classes="section" Text="{l:T audio.headphones}" />
+                              <TextBlock Classes="label" Text="{Binding HeadphoneName}" />
+                              <Grid ColumnDefinitions="Auto,*">
+                                <TextBlock Classes="label" Text="{Binding HeadphoneVolume, StringFormat={l:T audio.volume}}"
+                                           VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="100" />
+                                <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding HeadphoneVolume}" />
+                              </Grid>
+                              <Button Content="{l:T audio.test}" Command="{Binding TestHeadphonesCommand}" />
+                              <TextBlock Classes="label" Text="{l:T audio.defaultHint}" />
+                            </StackPanel>
+
+                            <Button Content="{l:T audio.refresh}" Command="{Binding RefreshCommand}" IsVisible="{Binding IsUsb}" />
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+
+                    <!-- 6 · Macros (compartidas) -->
+                    <TabItem Header="{l:T tab.macros}">
+                      <ScrollViewer>
+                        <Border Classes="card" DataContext="{Binding Macros}" x:DataType="vm:MacroEditorViewModel">
+                          <StackPanel Spacing="12">
+                            <TextBlock Classes="label" Text="{l:T macros.hint}" />
+                            <Grid ColumnDefinitions="*,Auto,Auto">
+                              <ComboBox ItemsSource="{Binding Macros}" SelectedItem="{Binding SelectedMacro}" HorizontalAlignment="Stretch"
+                                        PlaceholderText="{l:T macros.none}">
+                                <ComboBox.ItemTemplate>
+                                  <DataTemplate x:DataType="vm:MacroItemViewModel">
+                                    <TextBlock Text="{Binding Name}" />
+                                  </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                              </ComboBox>
+                              <Button Grid.Column="1" Content="{l:T macros.new}" Command="{Binding AddMacroCommand}" Margin="8,0,0,0" />
+                              <Button Grid.Column="2" Content="{l:T macros.delete}" Command="{Binding DeleteMacroCommand}" Margin="8,0,0,0"
+                                      IsEnabled="{Binding HasSelection}" />
+                            </Grid>
+                            <Panel IsVisible="{Binding HasSelection}">
+                              <StackPanel Spacing="10" DataContext="{Binding SelectedMacro}" x:DataType="vm:MacroItemViewModel">
+                                <TextBox Text="{Binding Name}" Watermark="{l:T macros.name}" />
+                                <CheckBox Content="{l:T macros.repeat}" IsChecked="{Binding RepeatWhileHeld}" />
+                                <Grid ColumnDefinitions="*,96,96,36">
+                                  <TextBlock Classes="label" Text="{l:T macros.action}" />
+                                  <TextBlock Grid.Column="1" Classes="label" Text="{l:T macros.hold}" Margin="6,0,0,0" />
+                                  <TextBlock Grid.Column="2" Classes="label" Text="{l:T macros.delay}" Margin="6,0,0,0" />
+                                </Grid>
+                                <ItemsControl ItemsSource="{Binding Steps}">
+                                  <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:MacroStepViewModel">
+                                      <Grid ColumnDefinitions="*,96,96,36" Margin="0,0,0,6">
+                                        <ComboBox ItemsSource="{Binding Actions}" SelectedItem="{Binding Action}" HorizontalAlignment="Stretch" MaxDropDownHeight="360">
+                                          <ComboBox.ItemTemplate>
+                                            <DataTemplate x:DataType="svc:ButtonAction">
+                                              <TextBlock Text="{Binding Name}" />
+                                            </DataTemplate>
+                                          </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <NumericUpDown Grid.Column="1" Value="{Binding HoldMs}" Minimum="1" Maximum="10000" Increment="10"
+                                                       FormatString="0" ShowButtonSpinner="False" Margin="6,0,0,0" />
+                                        <NumericUpDown Grid.Column="2" Value="{Binding DelayMs}" Minimum="0" Maximum="10000" Increment="10"
+                                                       FormatString="0" ShowButtonSpinner="False" Margin="6,0,0,0" />
+                                        <Button Grid.Column="3" Content="✕" Command="{Binding RemoveCommand}" Margin="6,0,0,0" />
+                                      </Grid>
+                                    </DataTemplate>
+                                  </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Button Content="{l:T macros.addStep}" Command="{Binding AddStepCommand}" />
+                                <TextBlock Classes="label" Text="{l:T macros.note}" />
+                              </StackPanel>
+                            </Panel>
+                          </StackPanel>
+                        </Border>
+                      </ScrollViewer>
+                    </TabItem>
+                  </TabControl>
+                </DockPanel>
+              </DataTemplate>
+            </ContentControl.ContentTemplate>
+          </ContentControl>
+        </Panel>
+      </DockPanel>
+
+      <!-- ===================== Página: Ajustes ===================== -->
+      <ScrollViewer IsVisible="{Binding IsSettingsPage}">
+        <StackPanel Spacing="12">
+
+          <Border Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="section" Text="{l:T settings.general}" />
+              <Grid ColumnDefinitions="140,*" RowDefinitions="Auto,Auto,Auto,Auto" >
+                <TextBlock Text="{l:T settings.language}" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1" MinWidth="220" ItemsSource="{Binding LanguageOptions}" SelectedIndex="{Binding LanguageIndex}" />
+                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="0,6,0,0"
+                            IsVisible="{Binding LanguageRestartNeeded}">
+                  <TextBlock Classes="label" Text="{l:T settings.restartNote}" VerticalAlignment="Center" />
+                  <Button Content="{l:T settings.restartNow}" Command="{Binding RestartAppCommand}" />
+                </StackPanel>
+                <TextBlock Grid.Row="2" Text="{l:T settings.theme}" VerticalAlignment="Center" Margin="0,12,0,0" />
+                <ComboBox Grid.Row="2" Grid.Column="1" MinWidth="220" Margin="0,12,0,0"
+                          ItemsSource="{Binding ThemeOptions}" SelectedIndex="{Binding ThemeIndex}" />
+                <TextBlock Grid.Row="3" Text="{l:T settings.layout}" VerticalAlignment="Center" Margin="0,12,0,0" />
+                <ComboBox Grid.Row="3" Grid.Column="1" MinWidth="220" Margin="0,12,0,0"
+                          ItemsSource="{Binding LayoutOptions}" SelectedIndex="{Binding LayoutIndex}" />
+              </Grid>
+              <StackPanel Spacing="2" Margin="0,4,0,0" IsVisible="{Binding AutostartSupported}">
+                <CheckBox Content="{l:T settings.autostart}" IsChecked="{Binding StartWithWindows}" />
+                <TextBlock Classes="label" Text="{l:T settings.autostartNote}" Margin="28,0,0,0" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card" DataContext="{Binding BatteryLights}" x:DataType="vm:BatteryLightsViewModel">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="section" Text="{l:T batlights.title}" />
+              <TextBlock Classes="label" Text="{l:T batlights.hint}" />
+              <CheckBox Content="{l:T batlights.low}" IsChecked="{Binding LowBatteryAlert}" />
+              <Grid ColumnDefinitions="Auto,*" IsEnabled="{Binding LowBatteryAlert}">
+                <TextBlock Classes="label" VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="130"
+                           Text="{Binding LowBatteryPercent, StringFormat={l:T batlights.lowAt}}" />
+                <Slider Grid.Column="1" Minimum="5" Maximum="45" TickFrequency="10" IsSnapToTickEnabled="True" Value="{Binding LowBatteryPercent}" />
+              </Grid>
+              <TextBlock Classes="label" Text="{l:T batlights.lowNote}" />
+              <CheckBox Content="{l:T batlights.charge}" IsChecked="{Binding ChargingColors}" Margin="0,6,0,0" />
+              <Grid ColumnDefinitions="Auto,*" IsEnabled="{Binding ChargingColors}">
+                <TextBlock Classes="label" VerticalAlignment="Center" Margin="0,0,12,0" MinWidth="130"
+                           Text="{Binding ChargedBlueAt, StringFormat={l:T batlights.blueAt}}" />
+                <Slider Grid.Column="1" Minimum="50" Maximum="85" TickFrequency="10" IsSnapToTickEnabled="True" Value="{Binding ChargedBlueAt}" />
+              </Grid>
+              <TextBlock Classes="label" Text="{l:T batlights.chargeNote}" />
+              <CheckBox Content="{l:T batlights.enforce}" IsChecked="{Binding EnforceLights}" Margin="0,6,0,0" />
+              <TextBlock Classes="label" Text="{l:T batlights.enforceNote}" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="12">
+              <TextBlock Classes="section" Text="{l:T req.title}" />
+              <TextBlock Classes="label" Text="{l:T req.intro}" />
+              <Grid ColumnDefinitions="*,Auto,Auto">
+                <StackPanel>
+                  <TextBlock Text="ViGEmBus" FontWeight="SemiBold" />
+                  <TextBlock Classes="label" Text="{l:T req.vigemDesc}" />
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="{Binding VigemStatus}" VerticalAlignment="Center" Margin="12,0" />
+                <Button Grid.Column="2" Content="{l:T btn.download}" Command="{Binding OpenVigemDownloadCommand}"
+                        IsVisible="{Binding !VigemInstalled}" VerticalAlignment="Center" />
+              </Grid>
+              <Grid ColumnDefinitions="*,Auto,Auto">
+                <StackPanel>
+                  <TextBlock Text="HidHide" FontWeight="SemiBold" />
+                  <TextBlock Classes="label" Text="{l:T req.hidhideDesc}" />
+                </StackPanel>
+                <TextBlock Grid.Column="1" Text="{Binding HidHideInstallStatus}" VerticalAlignment="Center" Margin="12,0" />
+                <Button Grid.Column="2" Content="{l:T btn.download}" Command="{Binding OpenHidHideDownloadCommand}"
+                        IsVisible="{Binding !HidHideInstalled}" VerticalAlignment="Center" />
+              </Grid>
+              <Button Content="{l:T req.check}" Command="{Binding CheckRequirementsCommand}" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+
+      <!-- ===================== Página: Acerca de ===================== -->
+      <ScrollViewer IsVisible="{Binding IsAboutPage}">
+        <StackPanel Spacing="12" MaxWidth="560">
+          <StackPanel Spacing="6" HorizontalAlignment="Center" Margin="0,8,0,8">
+            <Image Source="/Assets/padpilot.png" Width="96" Height="96" HorizontalAlignment="Center" />
+            <TextBlock Text="{Binding AppName}" FontSize="26" FontWeight="SemiBold" HorizontalAlignment="Center" />
+            <TextBlock Classes="label" Text="{Binding VersionText}" HorizontalAlignment="Center" />
+            <TextBlock Text="{l:T about.desc}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            <TextBlock Classes="label" Text="{Binding AuthorText}" HorizontalAlignment="Center" />
+          </StackPanel>
+
+          <Border Classes="card">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="section" Text="{l:T about.support}" />
+              <TextBlock Classes="label" Text="{l:T about.supportText}" />
+              <Button Classes="accent" Content="{l:T about.donate}" Command="{Binding DonateCommand}" IsVisible="{Binding HasDonate}" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="10">
+              <TextBlock Classes="section" Text="{l:T about.help}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Content="{l:T about.report}" Command="{Binding ReportIssueCommand}" IsVisible="{Binding HasIssues}" />
+                <Button Content="{l:T about.website}" Command="{Binding OpenWebsiteCommand}" IsVisible="{Binding HasWebsite}" />
+              </StackPanel>
+              <TextBlock Classes="label" Text="{l:T about.linksSoon}" IsVisible="{Binding HasNoLinks}" />
+            </StackPanel>
+          </Border>
+
+          <Border Classes="card">
+            <StackPanel Spacing="8">
+              <TextBlock Classes="section" Text="{l:T about.licenses}" />
+              <TextBlock Classes="label" Text="{Binding ThirdPartyText}" />
+              <TextBlock Classes="label" Text="{l:T about.trademarks}" Margin="0,6,0,0" />
+              <TextBlock Classes="label" Text="{Binding CopyrightText}" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </ScrollViewer>
+    </Panel>
+  </DockPanel>
+</Window>

@@ -1,0 +1,40 @@
+# Al subir una etiqueta v* (p. ej. v1.0.1) compila PadPilot y publica el release con el .zip portable.
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      - name: Publicar
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          # Carpeta (no archivo único): el .exe pequeño + bibliotecas firmadas pasa mejor Smart App Control.
+          dotnet publish src/PadPilot.App -c Release -r win-x64 --self-contained `
+            -p:PublishReadyToRun=true -p:DebugType=none -p:Version=$version -o publish/PadPilot
+
+      - name: Empaquetar
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          Copy-Item THIRD-PARTY-NOTICES.txt, LICENSE publish/PadPilot/
+          Compress-Archive publish/PadPilot "PadPilot-$version-win-x64.zip"
+
+      - name: Crear release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PadPilot-*-win-x64.zip
+          generate_release_notes: true
